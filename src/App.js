@@ -1,8 +1,12 @@
 import React, {useState,useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Country from './component/Country';
+import Cart from './component/Cart';
+import {image} from './fakeData.json'
 
 function App() {
+  //load data
   const [countries, setCountries] = useState([]);
   useEffect(() => {
     fetch('https://restcountries.eu/rest/v2/all')
@@ -12,15 +16,30 @@ function App() {
   })
   .catch(error => console.log(error))
   }, [])
+  //add to cart
+  const [cart, setCart] = useState([]);
+  const handleAddCountry =(country)=> {
+    const newCart = [...cart,country]
+    setCart(newCart);
+    // console.log('add', country)};
+  }
+  const [img, setFlower] = useState([]);
+  useEffect(() => {
+    setCountries(image)
+    console.log(image);
+  },[])
   return (
     <div className="App">
       <header className="App-header">
         <h2>{countries.length}</h2>
-        <ul>
+        <h2>Cart:{cart.length}</h2>
+        <Cart cart={cart}></Cart>
+        <div style={{display:'flex',flexFlow:'row wrap',justifyContent:'space-between'}}>
           {
-            countries.map(country => <li>{country.name}</li>)
+            countries.map(country => <Country country={country} handleAddCountry={handleAddCountry} key={country.alpha3Code}></Country>)
           }
-        </ul>
+    
+        </div>
         {/* <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
